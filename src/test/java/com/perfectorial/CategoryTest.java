@@ -1,7 +1,7 @@
 package com.perfectorial;
 
-import com.perfectorial.dto.CreateCategoryRequest;
-import com.perfectorial.dto.CreateCourseRequest;
+import com.perfectorial.entity.Category;
+import com.perfectorial.entity.Course;
 import com.perfectorial.entity.Session;
 import com.perfectorial.entity.SessionFile;
 import org.json.JSONObject;
@@ -22,8 +22,7 @@ public class CategoryTest {
 
     @Test
     public void createCategory() {
-        String string = "";
-        CreateCategoryRequest category = new CreateCategoryRequest();
+        Category category = new Category();
         category.setImage(new byte[]{1, 2});
         category.setName("category");
         category.setDescription("description");
@@ -56,8 +55,8 @@ public class CategoryTest {
 
     }
 
-    private List<CreateCourseRequest> getCourses() {
-        CreateCourseRequest course = new CreateCourseRequest();
+    private List<Course> getCourses() {
+        Course course = new Course();
         course.setImage(new byte[]{1, 2});
         course.setName("course");
         course.setDescription("courseDescription");

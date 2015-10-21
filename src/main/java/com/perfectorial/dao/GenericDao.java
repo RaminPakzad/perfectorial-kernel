@@ -13,12 +13,9 @@ import org.springframework.stereotype.Service;
 public class GenericDao {
     @Autowired
     protected MongoOperations mongoOperation;
-
-
+    
     public <T> T get(String property, String propertyValue, Class<T> clazz) {
         final Criteria criteria = Criteria.where(property).is(propertyValue);
         return mongoOperation.findOne(Query.query(criteria), clazz);
     }
-
-
 }

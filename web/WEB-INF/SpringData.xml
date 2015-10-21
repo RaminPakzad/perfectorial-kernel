@@ -14,9 +14,7 @@
                        slave-ok="false"
                        write-number="1"
                        write-timeout="0"
-                       write-fsync="true"
-
-                />
+                       write-fsync="true"/>
     </mongo:mongo>
 
     <mongo:db-factory dbname="mydb" mongo-ref="mongo"/>

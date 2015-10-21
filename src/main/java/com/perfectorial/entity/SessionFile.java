@@ -31,4 +31,9 @@ public class SessionFile extends DescriptorEntity {
     public void setFileLocation(String fileLocation) {
         this.fileLocation = fileLocation;
     }
+
+    @Override
+    public DescriptorType getDescriptorType() {
+        return DescriptorType.SessionFile;
+    }
 }

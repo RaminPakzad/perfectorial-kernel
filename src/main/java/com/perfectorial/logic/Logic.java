@@ -2,10 +2,9 @@ package com.perfectorial.logic;
 
 import com.perfectorial.dao.CategoryDao;
 import com.perfectorial.dao.CourseDao;
-import com.perfectorial.dto.CreateCategoryRequest;
-import com.perfectorial.dto.CreateCourseRequest;
-import com.perfectorial.dto.CreateSessionRequest;
-import com.perfectorial.entity.*;
+import com.perfectorial.entity.Category;
+import com.perfectorial.entity.Course;
+import com.perfectorial.entity.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,91 +15,34 @@ import java.util.Arrays;
  */
 @Service
 public class Logic {
+    @Autowired
+    private CategoryDao categoryDao;
+    @Autowired
+    private CourseDao courseDao;
+    @Autowired
+    private SessionDao sessionDao;
 
-    @Autowired
-    CategoryDao categoryDao;
-    @Autowired
-    CourseDao courseDao;
-    @Autowired
-    SessionDao sessionDao;
-
-    public void createCategory(CreateCategoryRequest categoryRequest) {
-        //temp
-        categoryRequest = new CreateCategoryRequest();
-        categoryRequest.setImage(new byte[]{1, 2});
-        categoryRequest.setName("category");
-        categoryRequest.setDescription("description");
-        categoryRequest.setLatinName("category");
-        categoryRequest.setKeywords(Arrays.asList("key1", "key2"));
-        //temp
-        Category category = getCategory(categoryRequest);
+    public void createCategory(Category category) {
+        //TODO: temp
+        category.setImage(new byte[]{1, 2});
+        category.setName("category");
+        category.setDescription("description");
+        category.setLatinName("category");
+        category.setKeywords(Arrays.asList("key1", "key2"));
         categoryDao.save(category);
     }
 
-
-    private Category getCategory(CreateCategoryRequest categoryRequest) {
-        Category category = new Category();
-        category.setCode(categoryRequest.getCode());
-        category.setDescription(categoryRequest.getDescription());
-        category.setImage(categoryRequest.getImage());
-        category.setKeywords(categoryRequest.getKeywords());
-        category.setName(categoryRequest.getName());
-        category.setLatinName(categoryRequest.getLatinName());
-        return category;
-    }
-
-    public void createCourse(CreateCourseRequest courseRequest) {
-        final Category category = categoryDao.getByCode(courseRequest.getParentCode());
-        Course course = getCourse(courseRequest, category);
-        category.getCourses().add(getTempDescriptor(course));
+    public void createCourse(Course course) {
+        final Category category = categoryDao.getByCode(course.getParentCode());
+        category.getCourses().add(course.asTempDescriptor());
         categoryDao.update(category);
         courseDao.save(course);
     }
 
-
-    private Course getCourse(CreateCourseRequest courseRequest, Category category) {
-        Course course = new Course();
-        course.setCode(courseRequest.getCode());
-        course.setDescription(courseRequest.getCode());
-        course.setImage(courseRequest.getImage());
-        course.setKeywords(courseRequest.getKeywords());
-        course.setName(courseRequest.getName());
-        course.setLatinName(courseRequest.getLatinName());
-        course.setParentCode(category.getCode());
-        course.setParentName(category.getName());
-        return course;
-    }
-    public void createSession(CreateSessionRequest createSessionRequest) {
-        final Course course = courseDao.getByCode(createSessionRequest.getParentCode());
-        Session session = getSession(createSessionRequest, course);
-        course.getSessions().add(getTempDescriptor(session));
+    public void createSession(Session session) {
+        final Course course = courseDao.getByCode(session.getParentCode());
+        course.getSessions().add(session.asTempDescriptor());
         courseDao.update(course);
         sessionDao.save(session);
     }
-
-    private Session getSession(CreateSessionRequest createSessionRequest, Course course) {
-        Session session = new Session();
-        session.setCode(createSessionRequest.getCode());
-        session.setDescription(createSessionRequest.getCode());
-        session.setImage(createSessionRequest.getImage());
-        session.setKeywords(createSessionRequest.getKeywords());
-        session.setName(createSessionRequest.getName());
-        session.setLatinName(createSessionRequest.getLatinName());
-        session.setParentCode(createSessionRequest.getCode());
-        session.setParentName(createSessionRequest.getName());
-        return session;
-    }
-
-    public TempDescriptor getTempDescriptor(DescriptorEntity entity)
-    {
-        TempDescriptor tempDescriptor = new TempDescriptor();
-        tempDescriptor.setCode(entity.getCode());
-        tempDescriptor.setName(entity.getName());
-        tempDescriptor.setLatinName(entity.getLatinName());
-        tempDescriptor.setImage(entity.getImage());
-        tempDescriptor.setDescription(entity.getDescription());
-        return tempDescriptor;
-    }
-
-
 }

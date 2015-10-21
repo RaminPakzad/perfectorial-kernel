@@ -1,7 +1,6 @@
 package com.perfectorial.logic;
 
 import com.perfectorial.dao.UserDao;
-import com.perfectorial.dto.RegisterUser;
 import com.perfectorial.entity.User;
 import com.perfectorial.entity.UserStatus;
 import com.perfectorial.util.SessionIdentifierGenerator;
@@ -13,77 +12,54 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserLogic {
-
     @Autowired
     private UserDao userDao;
 
-    public boolean createUser(RegisterUser registerUser) {
-        try {
-            User user = new User();
-            user.setEmail(registerUser.getEmail());
-            user.setFirstName(registerUser.getFirstName());
-            user.setLastName(registerUser.getLastName());
-            user.setUserStatus(UserStatus.CREATE);
-            String activeSessionId = SessionIdentifierGenerator.nextSessionId();
-            user.setActiveSessionId(activeSessionId);
-            userDao.save(user);
-            sendEmail(user.getEmail(), activeSessionId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public boolean createUser(User user) {
+        user.setUserStatus(UserStatus.CREATE);
+        String activeSessionId = SessionIdentifierGenerator.nextSessionId();
+        user.setActiveSessionId(activeSessionId);
+        userDao.save(user);
+        sendEmail(user.getEmail(), activeSessionId);
         return true;
     }
 
     public boolean activeUser(String sessionId) {
-        try {
-            User user = userDao.getBySessionId(sessionId);
-            if (user == null)
-                throw new RuntimeException();
-            user.setUserStatus(UserStatus.ACTIVE);
-            user.setActiveSessionId(SessionIdentifierGenerator.nextSessionId());
-            userDao.update(user);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        User user = userDao.getBySessionId(sessionId);
+        checkUser(user);
+        user.setUserStatus(UserStatus.ACTIVE);
+        user.setActiveSessionId(SessionIdentifierGenerator.nextSessionId());
+        userDao.update(user);
         return true;
     }
 
     public boolean requestChangePassword(String email) {
-        try {
-            User user = userDao.getByEmail(email);
-            if (user == null)
-                throw new RuntimeException();
-            final String nextSessionId = SessionIdentifierGenerator.nextSessionId();
-            user.setActiveSessionId(nextSessionId);
-            userDao.update(user);
-            sendEmail(email, nextSessionId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        User user = userDao.getByEmail(email);
+        checkUser(user);
+        final String nextSessionId = SessionIdentifierGenerator.nextSessionId();
+        user.setActiveSessionId(nextSessionId);
+        userDao.update(user);
+        sendEmail(email, nextSessionId);
         return true;
     }
 
-    private void sendEmail(String email, String nextSessionId) {
+    private void checkUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException(String.format("User cannot be null."));
+        }
+    }
 
+    private void sendEmail(String email, String nextSessionId) {
     }
 
     public boolean changePassword(String sessionId, String password) {
-        try {
-            final User user = userDao.getBySessionId(sessionId);
-            user.setPassword(password);
-            userDao.update(user);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        final User user = userDao.getBySessionId(sessionId);
+        user.setPassword(password);
+        userDao.update(user);
         return false;
     }
 
     public boolean isValidChangePassword(String sessionId) {
-        final User user = userDao.getBySessionId(sessionId);
-        return user != null;
+        return userDao.getBySessionId(sessionId) != null;
     }
 }

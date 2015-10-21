@@ -2,7 +2,7 @@ package com.perfectorial.controller;
 
 import com.perfectorial.dto.CategoryFilter;
 import com.perfectorial.entity.Category;
-import com.perfectorial.svc.Service;
+import com.perfectorial.svc.BasicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,16 +19,15 @@ import java.util.List;
 public class CategoryController {
 
     @Autowired
-    Service service;
+    private BasicService basicService;
 
     @RequestMapping(value = URIConstants.Category.GET_ALL, method = RequestMethod.GET)
     public @ResponseBody List<Category> getCategories(@RequestBody CategoryFilter categoryFilter) {
-        return service.getCategories(categoryFilter);
+        return basicService.getCategories(categoryFilter);
     }
     @RequestMapping(value = URIConstants.Category.CREATE, method = RequestMethod.GET)
     public @ResponseBody Integer createCategory() {
-        service.createCategory(null);
+        basicService.createCategory(null);
         return 1;
     }
-
 }

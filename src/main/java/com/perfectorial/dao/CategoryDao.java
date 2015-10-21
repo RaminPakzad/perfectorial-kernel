@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CategoryDao extends DescriptorDao<Category> {
-
     public void update(Category category) {
     }
-
 }

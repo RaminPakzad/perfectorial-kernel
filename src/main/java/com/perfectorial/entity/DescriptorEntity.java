@@ -1,18 +1,19 @@
 package com.perfectorial.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Reza Safarpour (rsafarpour1991@gmail.com) on 9/11/2015
  */
-public class DescriptorEntity implements Entity {
+public abstract class DescriptorEntity implements Entity {
     private String id;
     private String name;
     private String latinName;
     private String code;
     private byte[] image;
     private String description;
-    private List<String> keywords;
+    private List<String> keywords = new ArrayList<>();
     private DescriptorType descriptorType;
     private String parentCode;
     private String parentName;
@@ -74,9 +75,7 @@ public class DescriptorEntity implements Entity {
         this.keywords = keywords;
     }
 
-    public DescriptorType getDescriptorType() {
-        return descriptorType;
-    }
+    public abstract DescriptorType getDescriptorType();
 
     public void setDescriptorType(DescriptorType descriptorType) {
         this.descriptorType = descriptorType;
@@ -96,5 +95,15 @@ public class DescriptorEntity implements Entity {
 
     public void setParentName(String parentName) {
         this.parentName = parentName;
+    }
+
+    public TempDescriptor asTempDescriptor() {
+        TempDescriptor tempDescriptor = new TempDescriptor();
+        tempDescriptor.setCode(this.getCode());
+        tempDescriptor.setName(this.getName());
+        tempDescriptor.setLatinName(this.getLatinName());
+        tempDescriptor.setImage(this.getImage());
+        tempDescriptor.setDescription(this.getDescription());
+        return tempDescriptor;
     }
 }

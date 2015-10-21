@@ -1,7 +1,6 @@
 package com.perfectorial.dao;
 
 import com.perfectorial.entity.DescriptorEntity;
-import com.perfectorial.entity.DescriptorType;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -13,7 +12,6 @@ public class DescriptorDao<T extends DescriptorEntity> extends GenericDao {
     public static final String DESCRIPTOR_ENTITY = "DescriptorEntity";
 
     public void save(DescriptorEntity entity) {
-        entity.setDescriptorType(DescriptorType.valueOf(entity));
         mongoOperation.save(entity, DESCRIPTOR_ENTITY);
     }
 
@@ -31,5 +29,4 @@ public class DescriptorDao<T extends DescriptorEntity> extends GenericDao {
 
         return (Class) tClass;
     }
-
 }

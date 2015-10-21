@@ -18,10 +18,10 @@ import java.util.Map;
 public class DownloadFile {
     @Autowired
     private FileDao fileDao;
-    private Map<String, File> fileMap = new HashMap<String, File>();
+    private Map<String, File> fileMap = new HashMap<>();
 
-    public byte[] download(String fileId, int size, long from) throws IOException {
-        File file = null;
+    public byte[] download(String fileId, int size, long from) {
+        File file;
         if (fileMap.containsKey(fileId))
             file = fileMap.get(fileId);
         else {
@@ -37,14 +37,18 @@ public class DownloadFile {
         return getFileBytes(file, size, from);
     }
 
-    private byte[] getFileBytes(File file, int length, long from) throws IOException {
-        if ((from + length) > file.length())
-            length = new Long(file.length() - from).intValue();
-        byte[] b = new byte[length];
-        RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
-        randomAccessFile.seek(from);
-        randomAccessFile.read(b);
-        randomAccessFile.close();
-        return b;
+    private byte[] getFileBytes(File file, int length, long from) {
+        try {
+            if ((from + length) > file.length())
+                length = new Long(file.length() - from).intValue();
+            byte[] b = new byte[length];
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+            randomAccessFile.seek(from);
+            randomAccessFile.read(b);
+            randomAccessFile.close();
+            return b;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

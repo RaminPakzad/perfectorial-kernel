@@ -9,14 +9,14 @@ public enum DescriptorType {
     Session,
     SessionFile;
 
-    public static DescriptorType valueOf(Object o) {
-        if (o instanceof Category)
+    public static DescriptorType valueOf(DescriptorEntity entity) {
+        if (entity instanceof Category)
             return Category;
-        if (o instanceof Course)
+        if (entity instanceof Course)
             return Course;
-        if (o instanceof Session)
+        if (entity instanceof Session)
             return Session;
-        if (o instanceof SessionFile)
+        if (entity instanceof SessionFile)
             return SessionFile;
         throw new IllegalArgumentException();
     }
