@@ -1,6 +1,6 @@
 package com.perfectorial.util;
 
-import com.perfectorial.dao.FileDao;
+import com.perfectorial.dao.SessionFileDao;
 import com.perfectorial.entity.SessionFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class DownloadFile {
     @Autowired
-    private FileDao fileDao;
+    private SessionFileDao sessionFileDao;
     private Map<String, File> fileMap = new HashMap<>();
 
     public byte[] download(String fileId, int size, long from) {
@@ -25,7 +25,7 @@ public class DownloadFile {
         if (fileMap.containsKey(fileId))
             file = fileMap.get(fileId);
         else {
-            SessionFile sessionFile = fileDao.getByFileId(fileId);
+            SessionFile sessionFile = sessionFileDao.get(fileId);
             if (sessionFile == null)
                 throw new RuntimeException();
             String fileLocation = sessionFile.getFileLocation();
