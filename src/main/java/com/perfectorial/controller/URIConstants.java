@@ -5,8 +5,8 @@ package com.perfectorial.controller;
  */
 public class URIConstants {
     public static class Category {
-        public static final String GET_ALL = "getCategories";
-        public static final String CREATE = "createCategory";
+        public static final String CATEGORIES = "categories";
+        public static final String CATEGORY = "category";
     }
 
     public static class File {

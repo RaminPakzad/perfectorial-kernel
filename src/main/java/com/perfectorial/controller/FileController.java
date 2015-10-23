@@ -1,7 +1,7 @@
 package com.perfectorial.controller;
 
 import com.perfectorial.dto.DownloadRequest;
-import com.perfectorial.svc.BasicService;
+import com.perfectorial.logic.SessionFileLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class FileController {
     @Autowired
-    BasicService basicService;
+    private SessionFileLogic sessionFileLogic;
 
     @RequestMapping(value = URIConstants.File.DOWNLOAD, method = RequestMethod.GET)
     public @ResponseBody byte[] download(@RequestBody DownloadRequest categoryFilter) {
-        return basicService.download(categoryFilter);
+        return sessionFileLogic.download(categoryFilter);
     }
 }

@@ -1,9 +1,9 @@
 package com.perfectorial.controller;
 
-import com.perfectorial.dto.CategoryFilter;
 import com.perfectorial.entity.Category;
-import com.perfectorial.svc.BasicService;
+import com.perfectorial.logic.CategoryLogic;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.HashMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,15 +19,20 @@ import java.util.List;
 public class CategoryController {
 
     @Autowired
-    private BasicService basicService;
+    private CategoryLogic categoryLogic;
 
-    @RequestMapping(value = URIConstants.Category.GET_ALL, method = RequestMethod.GET)
-    public @ResponseBody List<Category> getCategories(@RequestBody CategoryFilter categoryFilter) {
-        return basicService.getCategories(categoryFilter);
+    @RequestMapping(value = URIConstants.Category.CATEGORIES, method = RequestMethod.GET
+            , consumes = "application/json"
+            , produces = "application/json")
+    @ResponseBody
+    public HashMap<String, String> getCategories() {
+        categoryLogic.getAll();
+        return null;
     }
-    @RequestMapping(value = URIConstants.Category.CREATE, method = RequestMethod.GET)
-    public @ResponseBody Integer createCategory() {
-        basicService.createCategory(null);
+
+    @RequestMapping(value = URIConstants.Category.CATEGORY, method = RequestMethod.POST)
+    public @ResponseBody Integer createCategory(@RequestBody Category category) {
+        categoryLogic.create(category);
         return 1;
     }
 }
