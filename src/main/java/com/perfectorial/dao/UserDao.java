@@ -10,24 +10,19 @@ import org.springframework.stereotype.Service;
  * @author Reza Safarpour (rsafarpour1991@gmail.com) on 9/25/2015
  */
 @Service
-public class UserDao extends GenericDao {
-    public void save(User user) {
-        mongoOperation.save(user);
-    }
-
+public class UserDao extends AbstractGenericDao<User> {
     public void update(User user) {
         final Criteria criteria = Criteria.where("id").is(user.getId());
         mongoOperation.updateFirst(Query.query(criteria), Update.update(user.getId(), user), User.class);
     }
 
     public User getBySessionId(String activeSessionId) {
-        return this.get("activeSessionId", activeSessionId,User.class);
+        return this.get(User.class, "activeSessionId", activeSessionId);
     }
 
     public User getByEmail(String email) {
-        return this.get("email", email,User.class);
+        return this.get(User.class, "email", email);
     }
-
 
 
 }
