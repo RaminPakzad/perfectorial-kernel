@@ -11,17 +11,16 @@ import org.springframework.stereotype.Service;
  * @author Reza Safarpour (rsafarpour1991@gmail.com) on 9/18/2015
  */
 @Service
-public class UserLogic {
+public class UserLogic extends AbstractGenericLogic<User> {
     @Autowired
     private UserDao userDao;
 
-    public boolean createUser(User user) {
+    public void create(User user) {
         user.setUserStatus(UserStatus.CREATE);
         String activeSessionId = SessionIdentifierGenerator.nextSessionId();
         user.setActiveSessionId(activeSessionId);
-        userDao.save(user);
+        userDao.create(user);
         sendEmail(user.getEmail(), activeSessionId);
-        return true;
     }
 
     public boolean activeUser(String sessionId) {
@@ -43,15 +42,6 @@ public class UserLogic {
         return true;
     }
 
-    private void checkUser(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException(String.format("User cannot be null."));
-        }
-    }
-
-    private void sendEmail(String email, String nextSessionId) {
-    }
-
     public boolean changePassword(String sessionId, String password) {
         final User user = userDao.getBySessionId(sessionId);
         user.setPassword(password);
@@ -61,5 +51,14 @@ public class UserLogic {
 
     public boolean isValidChangePassword(String sessionId) {
         return userDao.getBySessionId(sessionId) != null;
+    }
+
+    private void checkUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException(String.format("User cannot be null."));
+        }
+    }
+
+    private void sendEmail(String email, String nextSessionId) {
     }
 }

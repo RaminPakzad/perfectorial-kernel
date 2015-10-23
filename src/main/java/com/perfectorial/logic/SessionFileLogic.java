@@ -1,6 +1,7 @@
 package com.perfectorial.logic;
 
 import com.perfectorial.dto.DownloadRequest;
+import com.perfectorial.entity.SessionFile;
 import com.perfectorial.util.DownloadFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
  * @author Reza Safarpour (rsafarpour1991@gmail.com) on 9/24/2015
  */
 @Service
-public class FileLogic {
+public class SessionFileLogic extends AbstractGenericLogic<SessionFile> {
     @Autowired
     private DownloadFile downloadFile;
 
