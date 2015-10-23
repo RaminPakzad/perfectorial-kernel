@@ -5,7 +5,17 @@ import com.perfectorial.entity.Course;
 import com.perfectorial.entity.Session;
 import com.perfectorial.entity.SessionFile;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -15,10 +25,25 @@ import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 /**
  * @author Reza Safarpour (rsafarpour1991@gmail.com) on 9/11/2015
+ * @author Mohsen Ebrahimi
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration("classpath*:mvc-dispatcher-servlet.xml")
 public class CategoryTest {
+    @Autowired
+    private WebApplicationContext context;
+    private MockMvc mockMvc;
+
+    @Before
+    public void setUp() throws Exception {
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+    }
 
     @Test
     public void createCategory() {
@@ -52,7 +77,6 @@ public class CategoryTest {
         } catch (Exception e) {
             System.out.println("\nError while calling REST Service");
         }
-
     }
 
     private List<Course> getCourses() {
@@ -89,4 +113,11 @@ public class CategoryTest {
         return Arrays.asList(sessionFile);
     }
 
+    @Test
+    public void testGetAllCategoryController() throws Exception {
+        mockMvc.perform(get("/categories").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value("a"));
+    }
 }
