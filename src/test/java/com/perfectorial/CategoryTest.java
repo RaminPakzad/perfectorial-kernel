@@ -1,10 +1,10 @@
 package com.perfectorial;
 
+import com.perfectorial.controller.URIConstants;
 import com.perfectorial.entity.Category;
 import com.perfectorial.entity.Course;
 import com.perfectorial.entity.Session;
 import com.perfectorial.entity.SessionFile;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,15 +17,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -43,40 +39,6 @@ public class CategoryTest {
     @Before
     public void setUp() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-    }
-
-    @Test
-    public void createCategory() {
-        Category category = new Category();
-        category.setImage(new byte[]{1, 2});
-        category.setName("category");
-        category.setDescription("description");
-        category.setLatinName("category");
-        category.setKeywords(Arrays.asList("key1", "key2"));
-//        category.setCreateCourseRequests(getCourses());
-        JSONObject jsonObject = new JSONObject(category);
-        try {
-            URL url = new URL("http://localhost:8080/getCategories");
-            URLConnection connection = url.openConnection();
-            connection.setDoOutput(true);
-            connection.setRequestProperty("Content-Type", "application/json");
-            OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-            out.write(jsonObject.toString());
-            out.close();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
-            String result = "";
-            String s;
-            while ((s = in.readLine()) != null) {
-                result += s;
-            }
-            System.out.println(result);
-            System.out.println("\nREST Service Invoked Successfully..");
-            in.close();
-        } catch (Exception e) {
-            System.out.println("\nError while calling REST Service");
-        }
     }
 
     private List<Course> getCourses() {
@@ -115,9 +77,27 @@ public class CategoryTest {
 
     @Test
     public void testGetAllCategoryController() throws Exception {
-        mockMvc.perform(get("/categories").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+        createDummyCategory();
+        mockMvc.perform(get(URIConstants.Category.CATEGORIES).accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.code").value("a"));
+    }
+
+    private void createDummyCategory() throws Exception {
+        mockMvc.perform(post(URIConstants.Category.CATEGORIES).content(JsonUtil.asJsonString(buildCategory())))
+                .andExpect(status().isOk());
+    }
+
+    private Category buildCategory() {
+        final Category category = new Category();
+        category.setName("Dummy");
+        category.setLatinName("Latin Dummy");
+        category.setCode("DUM");
+        category.setDescription("Just for a dummy test");
+        category.setParentCode("DUF");
+        category.setParentName("Dummy Father");
+        category.setKeywords(Arrays.asList("Dummy", "Foolish", "Silly"));
+        return category;
     }
 }

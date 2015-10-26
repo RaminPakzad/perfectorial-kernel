@@ -5,11 +5,10 @@ package com.perfectorial.controller;
  */
 public class URIConstants {
     public static class Category {
-        public static final String CATEGORIES = "categories";
-        public static final String CATEGORY = "category";
+        public static final String CATEGORIES = "/categories";
     }
 
     public static class File {
-        public static final String DOWNLOAD = "download";
+        public static final String DOWNLOAD = "/download";
     }
 }

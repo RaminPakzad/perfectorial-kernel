@@ -11,12 +11,12 @@ public abstract class DescriptorEntity implements Entity {
     private String name;
     private String latinName;
     private String code;
-    private byte[] image;
     private String description;
-    private List<String> keywords = new ArrayList<>();
     private DescriptorType descriptorType;
     private String parentCode;
     private String parentName;
+    private byte[] image;
+    private List<String> keywords = new ArrayList<>();
 
 
     public String getId() {
