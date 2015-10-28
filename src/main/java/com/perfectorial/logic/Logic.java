@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Reza Safarpour (rsafarpour1991@gmail.com) on 9/26/2015
- * @deprecated Because it doesn't implement any particular entity logic. Services that are
+ * @deprecated Because it doesn't implement any particular entity logic. Methods that are
  * related to a specific entity should be moved to its own class and those that are common
  * among all logic classes should be moved to {@link com.perfectorial.logic.AbstractGenericLogic AbstractGenericLogic}.
  * This can be safely removed after method transformations.
