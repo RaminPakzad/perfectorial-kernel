@@ -6,6 +6,7 @@ package com.perfectorial.controller;
 public class URIConstants {
     public static class Category {
         public static final String CATEGORIES = "/categories";
+        public static final String CATEGORY = "/category/{id}";
     }
 
     public static class File {

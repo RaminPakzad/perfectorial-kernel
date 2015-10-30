@@ -47,8 +47,9 @@ public abstract class AbstractGenericDao<T extends Entity> implements GenericDao
     }
 
     @Override
-    public void create(T t) {
+    public T create(T t) {
         mongoOperation.save(t);
+        return t;
     }
 
     @Override

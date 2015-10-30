@@ -28,8 +28,8 @@ public abstract class AbstractGenericLogic<T extends Entity> implements GenericL
     }
 
     @Override
-    public void create(T t) {
-        genericDao.create(t);
+    public T create(T t) {
+        return genericDao.create(t);
     }
 
     @Override

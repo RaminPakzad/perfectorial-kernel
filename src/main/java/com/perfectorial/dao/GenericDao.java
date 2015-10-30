@@ -36,7 +36,7 @@ public interface GenericDao<T> {
 
     List<T> getAll();
 
-    void create(T t);
+    T create(T t);
 
     void update(T t);
 

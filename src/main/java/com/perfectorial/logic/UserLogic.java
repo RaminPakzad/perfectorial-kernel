@@ -15,12 +15,13 @@ public class UserLogic extends AbstractGenericLogic<User> {
     @Autowired
     private UserDao userDao;
 
-    public void create(User user) {
+    public User create(User user) {
         user.setUserStatus(UserStatus.CREATE);
         String activeSessionId = SessionIdentifierGenerator.nextSessionId();
         user.setActiveSessionId(activeSessionId);
         userDao.create(user);
         sendEmail(user.getEmail(), activeSessionId);
+        return user;
     }
 
     public boolean activeUser(String sessionId) {
