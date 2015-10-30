@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="perfectorial-kernel:war">
-    <output-path>$PROJECT_DIR$/out/artifacts/perfectorial_kernel_war</output-path>
-    <root id="archive" name="perfectorial-kernel_war.war">
-      <element id="artifact" artifact-name="perfectorial-kernel:war exploded" />
-    </root>
-  </artifact>
-</component>
